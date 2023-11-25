@@ -1,0 +1,7 @@
+.container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+}
+.shadow {
+  box-shadow: 3px 3px 2px 0px rgb(65, 1, 1);
+}

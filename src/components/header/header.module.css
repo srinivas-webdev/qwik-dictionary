@@ -1,0 +1,5 @@
+.header {
+  padding-left: .25rem;
+  box-shadow: rgb(47, 53, 60) 0px 15px 10px -10px;
+  background:linear-gradient(to right,rgb(0 0 0 / 80%), rgb(176, 176, 176), rgb(0 0 0 / 80%));
+}

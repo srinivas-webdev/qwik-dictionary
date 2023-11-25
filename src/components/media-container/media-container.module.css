@@ -1,0 +1,10 @@
+.dialog {
+  transition: opacity 0.5s ease-in-out;
+}
+.dialog:not([open]) {
+  pointer-events: none;
+  opacity: 0;
+}
+.dialog::backdrop {
+  backdrop-filter: blur(1rem);
+}

@@ -3,8 +3,9 @@ import {
   useSignal,
   useVisibleTask$,
   $,
-  useId
+  useId,
 } from "@builder.io/qwik";
+import type { QwikTouchEvent } from "@builder.io/qwik";
 import gsap from "gsap";
 
 import LeftArrowImg from '~/assets/chevron-left.svg'
@@ -23,6 +24,7 @@ export default component$<MediaListProps>(({mediaList}) => {
   
   const index = useSignal(0)
   const slideAmount = 248
+  const startPosX = useSignal(0)
 
   useVisibleTask$(async () => {
     const containerWidth = container.value?.offsetWidth
@@ -68,6 +70,20 @@ export default component$<MediaListProps>(({mediaList}) => {
     }
   })
 
+  const onTouchStart = $((ev: QwikTouchEvent) => {
+    const posX = ev.touches[0].clientX
+    startPosX.value = posX
+  })
+
+  const onTouchEnd = $((ev: QwikTouchEvent) => {
+    const deltaX = ev.changedTouches[0].clientX - startPosX.value
+    if (deltaX > 0) {
+      onClickLeft()
+    } else if (deltaX < 0) {
+      onClickRight()
+    }
+  })
+
   
   return (
     <div 
@@ -93,6 +109,8 @@ export default component$<MediaListProps>(({mediaList}) => {
       <section
         id={sliderId}
         class="flex gap-[8px] overflow-hidden"
+        onTouchStart$={onTouchStart}
+        onTouchEnd$={onTouchEnd}
       >
         {
           mediaList.map((media: Media) => (

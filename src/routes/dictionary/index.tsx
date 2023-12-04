@@ -1,11 +1,13 @@
 import { component$ } from "@builder.io/qwik";
 import type { DocumentHead } from "@builder.io/qwik-city";
-import { routeLoader$, useLocation } from "@builder.io/qwik-city";
+import { routeLoader$, useLocation, useNavigate } from "@builder.io/qwik-city";
 
 import { createClient } from '@supabase/supabase-js'
 
 import MediaContainer from "~/components/media-container/media-container";
 import styles from './dictionary.module.css'
+
+import { useAuthSession } from '~/routes/plugin@auth';
 
 const colors = [
   'rgb(30, 50, 100)', 'rgb(0, 100, 80)',
@@ -28,6 +30,8 @@ export const usePhraseDetails = routeLoader$(async function(requestEvent) {
 export default component$(() => {
   const loc = useLocation();
   const phraseDetails = usePhraseDetails()
+  const session = useAuthSession();
+  const navigateTo = useNavigate();
 
   return (
     <>
@@ -36,6 +40,20 @@ export default component$(() => {
           Meaning(s) of <span class="font-extrabold text-xl">
             {loc.url.searchParams.get("search")}</span> in English
         </p>
+        {
+          (session.value?.user !== undefined) && (
+            <button 
+              class="flex items-center justify-center space-x-2 bg-blue-900 text-white rounded-lg 
+              py-2 px-4 text-lg shadow-2xl" 
+              onClick$={() => {
+                localStorage.setItem("phraseDetails", JSON.stringify(phraseDetails.value));
+                navigateTo('/admin/phrase/create')
+              }}
+            >
+              <p>Update Phrase</p>
+            </button>
+          )
+        }
       </menu>
       { phraseDetails.value?.name && (
         <menu class={styles.container}>

@@ -1,5 +1,5 @@
 import { component$ } from "@builder.io/qwik";
-import { Form, useLocation } from '@builder.io/qwik-city';
+import { Form, useLocation, useNavigate } from '@builder.io/qwik-city';
 import type { DocumentHead } from "@builder.io/qwik-city";
 import { 
   useAuthSession, 
@@ -13,6 +13,7 @@ export default component$(() => {
   const session = useAuthSession();
   const signIn = useAuthSignin();
   const signOut = useAuthSignout();
+  const navigateTo = useNavigate()
 
   return (
     <section class="w-full mx-auto bg-white dark:bg-gray-800 px-5 py-4 rounded-md shadow-xl">
@@ -31,8 +32,9 @@ export default component$(() => {
           (session.value?.user !== undefined) ? (
             <button 
               class="flex items-center justify-center space-x-2 bg-blue-500 text-white rounded-lg py-2 px-3 text-lg" 
+              onClick$={() => navigateTo('/admin/phrase/create')}
             >
-              <span>Add New Phrase</span>
+              Add New Phrase
             </button>
           ) : (
             <h1 class="text-lg  dark:text-white">
